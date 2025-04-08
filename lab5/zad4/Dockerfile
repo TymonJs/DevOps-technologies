@@ -1,0 +1,6 @@
+ARG V=3.13
+FROM python:${V}-alpine
+ARG P=8080
+ENV PORT=$P
+VOLUME /app
+EXPOSE ${PORT}
