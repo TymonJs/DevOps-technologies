@@ -310,7 +310,16 @@
         }
       ],
       "security-admin-console": [],
-      "react-app": [],
+      "react-app": [
+        {
+          "id": "757400c7-7414-4e49-ba67-61f67e797f35",
+          "name": "uma_protection",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "897c154b-bd8e-4f73-ac0f-3e56feaf8013",
+          "attributes": {}
+        }
+      ],
       "admin-cli": [],
       "account-console": [],
       "broker": [
@@ -729,7 +738,7 @@
         "http://localhost:3001/*"
       ],
       "webOrigins": [
-        "https://www.keycloak.org"
+        "*"
       ],
       "notBefore": 0,
       "bearerOnly": false,
@@ -747,7 +756,9 @@
         "oidc.ciba.grant.enabled": "false",
         "client.secret.creation.time": "1748350032",
         "backchannel.logout.session.required": "true",
+        "frontchannel.logout.session.required": "true",
         "oauth2.device.authorization.grant.enabled": "false",
+        "display.on.consent.screen": "false",
         "backchannel.logout.revoke.offline.tokens": "false"
       },
       "authenticationFlowBindingOverrides": {},
@@ -823,12 +834,10 @@
       "alwaysDisplayInConsole": true,
       "clientAuthenticatorType": "client-secret",
       "redirectUris": [
-        "http://localhost:3000/*",
-        "https://www.keycloak.org/app/*"
+        "http://localhost:3000/*"
       ],
       "webOrigins": [
-        "http://localhost:3000",
-        "https://www.keycloak.org"
+        "http://localhost:3000"
       ],
       "notBefore": 0,
       "bearerOnly": false,
@@ -843,6 +852,7 @@
       "attributes": {
         "realm_client": "false",
         "oidc.ciba.grant.enabled": "false",
+        "client.secret.creation.time": "1748355883",
         "backchannel.logout.session.required": "true",
         "frontchannel.logout.session.required": "true",
         "post.logout.redirect.uris": "+",
