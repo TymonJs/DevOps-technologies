@@ -5,7 +5,7 @@ const config = {
     "resource": "express-app",
     "verify-token-audience": false,
     "credentials": {
-      "secret": "Q4QDcKqm39h51E8FZvm0pAu5DK5J2OUS"
+      "secret": "wTAWujubArSpkQCz0QdPLjdvt3UBCZEI"
     },
     "confidential-port": 0,
     "policy-enforcer": {
