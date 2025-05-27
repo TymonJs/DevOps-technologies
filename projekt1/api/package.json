@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "cors": "^2.8.5",
+    "ef-keycloak-connect": "^1.7.7-Zong-2FA",
+    "express": "^5.1.0",
+    "pg": "^8.16.0"
+  }
+}

@@ -1,0 +1,17 @@
+services:
+  db:
+    image: mongo:4.1.3
+    networks:
+      - net_A
+    volumes:
+      - mongoVolume:/data/db
+    ports:
+      - "27019:27017"
+
+volumes:
+  mongoVolume:
+
+networks:
+  net_A:
+    external: false
+    name: net_A
