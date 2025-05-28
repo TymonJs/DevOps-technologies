@@ -1,44 +1,25 @@
-const config = {
-    "realm": "myrealm",
-    "auth-server-url": "http://localhost:8080/",
-    "ssl-required": "external",
-    "resource": "express-app",
-    "verify-token-audience": false,
-    "credentials": {
-      "secret": "wTAWujubArSpkQCz0QdPLjdvt3UBCZEI"
-    },
-    "confidential-port": 0,
-    "policy-enforcer": {
-      "credentials": {}
-    }
-  }
-
 const express = require("express");
 const app = express();
-const cors = require("cors");
-
-const session = require('express-session');
-const memoryStore = new session.MemoryStore();
-const {NodeAdapter} = require("ef-keycloak-connect");
-const keycloak = new NodeAdapter(config)
-
-
-app.use(session({
-    secret: 'secret1',
-    resave: false,
-    saveUninitialized: true,
-    store: memoryStore
-}));
-
-
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0
-
-
 app.use(express.json());
-app.use(cors({
-  origin: "*", 
-  credentials: true
-}));
+
+const cors = require('cors');
+app.use(cors({ origin: "http://localhost:3000" }));
+
+const { auth } = require('express-oauth2-jwt-bearer');
+
+const issuerBaseURL = "http://keycloak:8080/realms/myrealm";
+const jwksUri = "http://keycloak:8080/realms/myrealm/protocol/openid-connect/certs";
+const audience = ["account"];
+
+const checkJwt = auth({
+  audience: audience,
+  issuer: "http://localhost:8080/realms/myrealm",
+  issuerBaseURL: issuerBaseURL,
+  jwksUri: jwksUri,
+  tokenSigningAlg: 'RS256'
+});
+
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 const { Pool } = require("pg");
 
@@ -50,7 +31,7 @@ const pool = new Pool({
   port: 5432,
 });
 
-app.get("/notes", keycloak.protect(),  async (req, res) => {
+app.get("/notes", checkJwt, async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM notes ORDER BY id DESC");
     res.json(result.rows);
@@ -59,7 +40,7 @@ app.get("/notes", keycloak.protect(),  async (req, res) => {
   }
 });
 
-app.get("/notes/:name", keycloak.protect(), async (req, res) => {
+app.get("/notes/:name", checkJwt, async (req, res) => {
   const { name } = req.params;
   try {
     const result = await pool.query(
@@ -72,26 +53,35 @@ app.get("/notes/:name", keycloak.protect(), async (req, res) => {
   }
 });
 
-app.post("/notes", keycloak.protect(), async (req, res) => {
+app.post("/notes", checkJwt, async (req, res) => {
   try {
     const { name, note } = req.body;
     if (!name || !note) {
       return res.status(400).json({ error: "Missing 'name' or 'note' in body" });
     }
-
     const result = await pool.query(
       "INSERT INTO notes(name, note) VALUES($1, $2) RETURNING *",
       [name, note]
     );
-
     res.status(201).json(result.rows[0]);
   } catch (e) {
     res.status(500).send(`Error inserting note: ${e.message}`);
   }
 });
 
-app.get("/health", (req,res) => {
+app.get("/health", (req, res) => {
   res.status(200).send("UP");
-})
+});
+
+app.use(function (err, req, res, next) {
+  if (err.name === 'UnauthorizedError') {
+    res.status(401).json({ message: err.message || 'Invalid token' });
+  } else if (err.code && err.status) {
+     res.status(err.status).json({ message: err.message, code: err.code });
+  }
+  else {
+    res.status(err.status || 500).json({ message: err.message || 'Internal server error' });
+  }
+});
 
 app.listen(3001, () => console.log("Express running on port 3001"));
