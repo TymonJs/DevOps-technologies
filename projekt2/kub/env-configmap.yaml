@@ -1,0 +1,15 @@
+apiVersion: v1
+data:
+  KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+  KC_BOOTSTRAP_ADMIN_USERNAME: admin
+  KC_HEALTH_ENABLED: "true"
+  NODE_VER: 18-alpine
+  POSTGRES_DB: mydb
+  POSTGRES_HOST: db
+  POSTGRES_PASSWORD: mypass
+  POSTGRES_USER: myuser
+kind: ConfigMap
+metadata:
+  labels:
+    io.kompose.service: api-env
+  name: env

@@ -1,0 +1,37 @@
+# ingress-config.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-app-ingress
+  namespace: proj-namespace
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/use-regex: "true" # Ta adnotacja jest kluczowa dla Nginx
+    # Rozważ dodanie adnotacji rewrite-target, jeśli Twoje backendy
+    # nie oczekują prefixów ścieżek. Np. dla /api(/|$)(.*) -> /$2
+    # nginx.ingress.kubernetes.io/rewrite-target: /$2 # Jeśli API oczekuje /notes zamiast /api/notes
+spec:
+  rules:
+  - http: # Usunąłeś 'host', więc Ingress będzie działał dla IP kontrolera
+      paths:
+      - path: /api(/|$)(.*) # API - bardziej specyficzne, więc może być wyżej
+        pathType: ImplementationSpecific # ZMIANA TUTAJ (lub pozostawienie, jeśli już było)
+        backend:
+          service:
+            name: api
+            port:
+              number: 3001
+      - path: /auth(/|$)(.*) # Keycloak - bardziej specyficzne
+        pathType: ImplementationSpecific # ZMIANA TUTAJ (lub pozostawienie)
+        backend:
+          service:
+            name: keycloak
+            port:
+              number: 8080
+      - path: /?(.*) # Frontend na głównej ścieżce - jako ostatnia, najbardziej ogólna reguła
+        pathType: ImplementationSpecific # ZMIANA TUTAJ
+        backend:
+          service:
+            name: frontend
+            port:
+              number: 3000
