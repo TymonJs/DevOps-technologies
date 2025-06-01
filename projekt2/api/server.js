@@ -7,16 +7,17 @@ app.use(cors({ origin: "http://localhost" }));
 
 const { auth } = require('express-oauth2-jwt-bearer');
 
-const issuerBaseURL = "http://keycloak:8080/realms/myrealm";
-const jwksUri = "http://keycloak:8080/realms/myrealm/protocol/openid-connect/certs";
-const audience = ["account"];
+// const issuerBaseURL = "http://localhost/auth/realms/myrealm";
+// const issuerBaseURL = "http://localhost/auth/realms/myrealm";
+const jwksUri = "http://keycloak.proj-namespace.svc.cluster.local:8080/auth/realms/myrealm/protocol/openid-connect/certs";
+const audience = "account";
 
 const checkJwt = auth({
   audience: audience,
   issuer: "http://localhost/auth/realms/myrealm",
-  issuerBaseURL: issuerBaseURL,
+  // issuerBaseURL: issuerBaseURL,
   jwksUri: jwksUri,
-  tokenSigningAlg: 'RS256'
+  tokenSigningAlg: 'RS256',
 });
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
@@ -31,7 +32,7 @@ const pool = new Pool({
   port: 5432,
 });
 
-app.get("/notes", checkJwt, async (req, res) => {
+app.get("/api/notes", checkJwt, async (req, res) => {
   try {
     const roles = req.auth.payload.realm_access?.roles || [];
     const isAdmin = roles.includes('admin');
@@ -55,7 +56,7 @@ app.get("/notes", checkJwt, async (req, res) => {
   }
 });
 
-app.post("/notes", checkJwt, async (req, res) => {
+app.post("/api/notes", checkJwt, async (req, res) => {
   try {
     const { note } = req.body; 
     const name = req.auth.payload.preferred_username;
@@ -73,7 +74,7 @@ app.post("/notes", checkJwt, async (req, res) => {
   }
 });
 
-app.get("/health", (req, res) => {
+app.get("/api/health", (req, res) => {
   res.status(200).send("UP");
 });
 

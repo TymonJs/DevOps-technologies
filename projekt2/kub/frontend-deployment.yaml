@@ -28,7 +28,9 @@ spec:
           envFrom:
             - configMapRef:
                 name: env
-          image: tymonjs/frontend:latest
+          # image: tymonjs/frontend:latest
+          image: frontend-kub:latest
+          imagePullPolicy: IfNotPresent
           name: frontend
           ports:
             - containerPort: 3000
