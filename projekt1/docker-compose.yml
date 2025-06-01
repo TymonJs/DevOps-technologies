@@ -1,9 +1,14 @@
 services:
   api:
+    image: tymonjs/api:latest
     build: 
       context: api
       args:
         NODE_VER: ${NODE_VER}
+      platforms:
+        - "linux/amd64"
+        - "linux/arm64"
+      
     container_name: api
     ports:
       - "3001:3001"
@@ -47,10 +52,14 @@ services:
 
   
   frontend:
+    image: tymonjs/frontend:latest
     build: 
       context: frontend
       args:
         NODE_VER: ${NODE_VER}
+      platforms:
+        - "linux/amd64"
+        - "linux/arm64"
     container_name: frontend
     env_file:
       - .env
@@ -71,12 +80,10 @@ services:
       - .env
     ports: 
       - "8080:8080"
-      - "9000:9000"
     volumes:
       - keycloak_data:/opt/keycloak/data
       - ./realm-export.json:/opt/keycloak/data/import/realm-export.json
-    command: start-dev 
-    # --import-realm
+    command: start-dev --import-realm
     networks:
       proj_network:
         ipv4_address: 172.20.0.13

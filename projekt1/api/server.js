@@ -33,31 +33,35 @@ const pool = new Pool({
 
 app.get("/notes", checkJwt, async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM notes ORDER BY id DESC");
+    const roles = req.auth.payload.realm_access?.roles || [];
+    const isAdmin = roles.includes('admin');
+    
+    let result;
+    if (isAdmin) {
+      result = await pool.query("SELECT * FROM notes ORDER BY id DESC LIMIT 10");
+    } else {
+      const username = req.auth.payload.preferred_username;
+      if (!username) {
+        return res.status(400).json({ error: "Username not found in token." });
+      }
+      result = await pool.query(
+        "SELECT * FROM notes WHERE name = $1 ORDER BY id DESC",
+        [username]
+      );
+    }
     res.json(result.rows);
   } catch (e) {
-    res.status(500).send(`Error fetching notes: ${e.message}`);
-  }
-});
-
-app.get("/notes/:name", checkJwt, async (req, res) => {
-  const { name } = req.params;
-  try {
-    const result = await pool.query(
-      "SELECT * FROM notes WHERE name = $1 ORDER BY id DESC",
-      [name]
-    );
-    res.json(result.rows);
-  } catch (e) {
-    res.status(500).send(`Error fetching user notes: ${e.message}`);
+    res.status(500).json({ error: `Error fetching notes: ${e.message}` });
   }
 });
 
 app.post("/notes", checkJwt, async (req, res) => {
   try {
-    const { name, note } = req.body;
+    const { note } = req.body; 
+    const name = req.auth.payload.preferred_username;
+
     if (!name || !note) {
-      return res.status(400).json({ error: "Missing 'name' or 'note' in body" });
+      return res.status(400).json({ error: "Missing 'note' in body or username in token" });
     }
     const result = await pool.query(
       "INSERT INTO notes(name, note) VALUES($1, $2) RETURNING *",
@@ -65,7 +69,7 @@ app.post("/notes", checkJwt, async (req, res) => {
     );
     res.status(201).json(result.rows[0]);
   } catch (e) {
-    res.status(500).send(`Error inserting note: ${e.message}`);
+    res.status(500).json({ error: `Error inserting note: ${e.message}` });
   }
 });
 
@@ -84,4 +88,4 @@ app.use(function (err, req, res, next) {
   }
 });
 
-app.listen(3001, () => console.log("Express running on port 3001"));
+app.listen(3001, () => console.log("Express running on 3001"));
