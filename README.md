@@ -1,2 +1,2 @@
 ## Tymon Jasiński
-Instrukcje dotyczące uruchomienia obu projektów są opisane w dedykowanych im katalogach.
+Instrukcje dotyczące uruchomienia poszczególnych etapów projektu są opisane w dedykowanych im katalogach.

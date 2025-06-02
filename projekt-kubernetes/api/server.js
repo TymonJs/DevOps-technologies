@@ -7,7 +7,7 @@ app.use(cors({ origin: "http://localhost" }));
 
 const { auth } = require('express-oauth2-jwt-bearer');
 
-const jwksUri = "http://keycloak.proj-namespace.svc.cluster.local:8080/auth/realms/myrealm/protocol/openid-connect/certs";
+const jwksUri = `http://keycloak.${process.env.NAMESPACE}.svc.cluster.local:8080/auth/realms/myrealm/protocol/openid-connect/certs`;
 const audience = "account";
 
 const checkJwt = auth({

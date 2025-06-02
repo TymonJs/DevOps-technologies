@@ -19,8 +19,7 @@ spec:
             - npm
             - run
             - start
-          # image: tymonjs/frontend:latest
-          image: frontend-kub:latest
+          image: tymonjs/frontend-kub:latest
           imagePullPolicy: IfNotPresent
           name: frontend
           ports:

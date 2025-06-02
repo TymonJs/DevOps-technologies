@@ -22,7 +22,7 @@ spec:
             - --import-realm
           envFrom:
             - configMapRef:
-                name: env
+                name: keycloak-env
             - secretRef:
                 name: keycloak-secret
           image: quay.io/keycloak/keycloak:26.1.4

@@ -7,5 +7,6 @@ data:
 kind: ConfigMap
 metadata:
   labels:
-    app: api-env
-  name: env
+    app: keycloak-env
+  name: keycloak-env
+

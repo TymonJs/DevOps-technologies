@@ -12,7 +12,6 @@ function App() {
     if (!keycloak.token) return;
     try {
       const token = keycloak.token;
-      console.log(token);
       
       const res = await fetch("http://localhost/api/notes", {
         headers: {

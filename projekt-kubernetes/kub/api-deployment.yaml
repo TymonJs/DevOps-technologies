@@ -19,8 +19,9 @@ spec:
           envFrom:
             - secretRef:
                 name: postgres-secret
-          # image: tymonjs/api:latest
-          image: api-kub:latest
+            - configMapRef:
+                name: api-env
+          image: tymonjs/api-kub:latest
           imagePullPolicy: IfNotPresent
           name: api
           ports:
