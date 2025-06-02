@@ -7,5 +7,5 @@ data:
 kind: ConfigMap
 metadata:
   labels:
-    io.kompose.service: api-env
+    app: api-env
   name: env

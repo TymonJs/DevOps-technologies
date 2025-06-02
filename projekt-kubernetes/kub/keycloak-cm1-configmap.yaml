@@ -6,5 +6,5 @@ metadata:
   annotations:
     use-subpath: "true"
   labels:
-    io.kompose.service: keycloak
+    app: keycloak
   name: keycloak-cm1
