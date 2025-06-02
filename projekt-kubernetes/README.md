@@ -10,4 +10,4 @@ Na poziomie folderu **/projekt-kubernetes** należy użyć kolejnych instrukcji:
  * Frontend: localhost/
 
 ## Panel admina
-Aby użytkownik miał dostęp do panelu admina należy wejść w konsolę administracyjną Keycloak i dodać wybranemu użytkownikowi rolę **admin**.
+Aby użytkownik miał dostęp do panelu admina należy wejść w konsolę administracyjną Keycloak w realmie **myrealm** i dodać wybranemu użytkownikowi rolę **admin**.
