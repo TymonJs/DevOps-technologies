@@ -24,8 +24,8 @@ spec:
     spec:
       containers:
         - envFrom:
-            - configMapRef:
-                name: env
+            - secretRef:
+                name: postgres-secret
           image: postgres:latest
           name: db
           ports:

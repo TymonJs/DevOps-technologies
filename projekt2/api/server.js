@@ -7,15 +7,12 @@ app.use(cors({ origin: "http://localhost" }));
 
 const { auth } = require('express-oauth2-jwt-bearer');
 
-// const issuerBaseURL = "http://localhost/auth/realms/myrealm";
-// const issuerBaseURL = "http://localhost/auth/realms/myrealm";
 const jwksUri = "http://keycloak.proj-namespace.svc.cluster.local:8080/auth/realms/myrealm/protocol/openid-connect/certs";
 const audience = "account";
 
 const checkJwt = auth({
   audience: audience,
   issuer: "http://localhost/auth/realms/myrealm",
-  // issuerBaseURL: issuerBaseURL,
   jwksUri: jwksUri,
   tokenSigningAlg: 'RS256',
 });

@@ -29,6 +29,8 @@ spec:
           envFrom:
             - configMapRef:
                 name: env
+            - secretRef:
+                name: keycloak-secret
           image: quay.io/keycloak/keycloak:26.1.4
           name: keycloak
           ports:
