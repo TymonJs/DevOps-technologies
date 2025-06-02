@@ -25,9 +25,6 @@ spec:
             - npm
             - run
             - start
-          envFrom:
-            - configMapRef:
-                name: env
           # image: tymonjs/frontend:latest
           image: frontend-kub:latest
           imagePullPolicy: IfNotPresent
