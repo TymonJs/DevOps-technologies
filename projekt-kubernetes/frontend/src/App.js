@@ -86,7 +86,7 @@ function App() {
         setNewNote("");
       }
     } catch (err) {
-      // Handle error appropriately
+      console.error(err)
     }
   };
 

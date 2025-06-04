@@ -1,3 +1,4 @@
+# Tymon Jasiński
 ## Uruchomienie projektu
 Na poziomie folderu **/projekt-kubernetes** należy użyć kolejnych instrukcji:
  * Zastosowanie kontrolera ingress-nginx: ``kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.10.1/deploy/static/provider/cloud/deploy.yaml``

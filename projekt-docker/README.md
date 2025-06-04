@@ -1,3 +1,4 @@
+# Tymon Jasiński
 ## Uruchomienie projektu
 Na poziomie folderu **/projekt-docker** należy użyć komendy ``docker compose up``
 
