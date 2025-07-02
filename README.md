@@ -1,2 +1,2 @@
 ## Tymon Jasiński
-Instrukcje dotyczące uruchomienia poszczególnych etapów projektu są opisane w dedykowanych im katalogach.
+Instructions for running individual projects are provided within their respective directories.
